@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const methodOverride = require('method-override');
 
 
 const app = express();
@@ -7,6 +8,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(methodOverride('_method'))
+
 
 var mysql = require('mysql');
 
@@ -73,6 +76,53 @@ app.get('/', async(req, res) =>{
     // });
     
 });
+
+//edit form
+app.get('/edit', async(req, res) =>{
+    const getId = req.query.std_id;
+    console.log(getId)
+    pool.getConnection(function(err, connection) {
+        if (err) throw err;
+        connection.query(
+            "SELECT * FROM student WHERE std_id = ?",
+            [getId], async(er, result, fields)=> {
+            if (er) throw er;
+            console.log(result);
+            res.render('edit',{result})
+        });
+    });
+    
+    
+});
+
+app.put('/edit',async (req,res)=>{
+    const {std_id,name,age} = req.body;
+    pool.getConnection(async function(err, connection) {
+        if (err) throw err;
+        connection.query(
+            "UPDATE student SET name = ?, age = ? WHERE std_id = ?", 
+            [name, age, std_id], async(er, result, fields)=> {
+            if (er) throw er;
+            console.log(result);
+        });
+    });
+    res.redirect('/');
+});
+
+app.delete('/delete',(req,res)=>{
+    const getId = req.body.std_id;
+    pool.getConnection(async function(err, connection) {
+        if (err) throw err;
+        connection.query(
+            "DELETE FROM student WHERE std_id = ?", 
+            [getId], async(er, result, fields)=> {
+            if (er) throw er;
+            console.log(result);
+        });
+    });
+    res.redirect('/');
+})
+
 
 
 

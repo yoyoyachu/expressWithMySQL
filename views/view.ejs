@@ -3,7 +3,20 @@
     <tr><th>id</th><th>name</th><th>age</th></tr>
 
     <% for(let student of result){%>
-        <tr><td><%=student.std_id  %></td><td><%=student.name  %></td><td><%=student.age  %></td></tr>
+        <tr>
+            <td><%=student.std_id  %></td>
+            <td><%=student.name  %></td>
+            <td><%=student.age  %></td>
+            <td>
+                <a href="/edit?std_id=<%=student.std_id  %>">Edit</a>
+            </td>
+            <td>
+                <form action="/delete/?_method=DELETE " method="POST">
+                    <input type="hidden" name="std_id" value="<%= student.std_id  %>" id="">
+                    <input type="submit" value="Delete" name="" id="">
+                </form>
+            </td>
+        </tr>
     <% } %> 
 </table>
 <a href="/new">Add New</a>

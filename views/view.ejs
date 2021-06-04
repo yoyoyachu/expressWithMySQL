@@ -1,0 +1,9 @@
+<h1>Welcome To My App</h1>
+<table border="1">
+    <tr><th>id</th><th>name</th><th>age</th></tr>
+
+    <% for(let student of result){%>
+        <tr><td><%=student.std_id  %></td><td><%=student.name  %></td><td><%=student.age  %></td></tr>
+    <% } %> 
+</table>
+<a href="/new">Add New</a>
